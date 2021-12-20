@@ -245,8 +245,12 @@ proc gemm_strided*[T: SomeNumber and not(uint32|uint64|uint|int)](
         elif hasSse41(): dispatch(x86_SSE4_1)
         elif hasSse2():  dispatch(x86_SSE2)
       elif T is int64:
-        if hasAvx512f(): dispatch(x86_AVX512)
-        elif hasSse2():  dispatch(x86_SSE2)
+        if hasAvx512f():
+          echo "BRANCH 1"
+          dispatch(x86_SSE2)
+        elif hasSse2():
+          echo "BRANCH 2"
+          dispatch(x86_SSE2)
     dispatch(x86_Generic)
 
 proc gemm_strided*[T: uint32|uint64|uint|int](
